@@ -11,20 +11,14 @@ class TodoScreen extends StatefulWidget {
 
 class _TodoScreenState extends State<TodoScreen> {
   TextEditingController txtTitle = TextEditingController();
-  List<String> tasks= [];
+  int selIndx = -1;
+  List<String> tasks = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Todo app',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Colors.purple,
+        title: Text('Todo App', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Column(
         children: [
@@ -42,9 +36,14 @@ class _TodoScreenState extends State<TodoScreen> {
               IconButton(
                 onPressed: () {
                   log(txtTitle.text);
-                  if(txtTitle.text.isNotEmpty) 
-                  {
-                    tasks.add(txtTitle.text);
+                  if (txtTitle.text.isNotEmpty) {
+                    if(selIndx==-1){
+                      tasks.add(txtTitle.text);
+                    }
+                    else{
+                      tasks[selIndx] = txtTitle.text;
+                      selIndx = -1;
+                    }
                     txtTitle.text = "";
                     setState(() {});
                   }
@@ -61,6 +60,14 @@ class _TodoScreenState extends State<TodoScreen> {
                   width: 100,
                   child: Row(
                     children: [
+                      IconButton(
+                        onPressed: () {
+                          txtTitle.text = tasks[index];
+                          selIndx = index;
+                          setState(() {});
+                        },
+                        icon: Icon(Icons.edit),
+                      ),
                       IconButton(
                         onPressed: () {
                           tasks.removeAt(index);
